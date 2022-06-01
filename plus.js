@@ -599,7 +599,7 @@ function initialIntervalsSetup() {
 	g_estimationTotal = InfoBoxFactory.makeTotalInfoBox(ESTIMATION, true).hide();
 	g_remainingTotal = InfoBoxFactory.makeTotalInfoBox(REMAINING, true).hide();
 
-	doAllUpdates(false);
+	// doAllUpdates(false);
 	chrome.storage.local.get([LOCALPROP_NEEDSHOWHELPPANE], function (obj) {
 	    if (obj && obj[LOCALPROP_NEEDSHOWHELPPANE]) {
 	        var pair = {};
@@ -612,7 +612,7 @@ function initialIntervalsSetup() {
 	    
 
 	setInterval(function () {
-	    doAllUpdates(true);
+	    // doAllUpdates(true);
 	}, UPDATE_STEP);
 
 	if (isPlusDisplayDisabled())
@@ -638,7 +638,7 @@ function initialIntervalsSetup() {
 		        cancelZoomin(null, true); //review zig: find a better way that is not timing-related, like a chrome url-changed notif, or change the href of recent/remaining to handlers
 		    }
 
-			setTimeout(function () { doAllUpdates(false); }, 100); //breathe
+			// setTimeout(function () { doAllUpdates(false); }, 100); //breathe
 		}
 	}, 400); //check often, its important to prevent a big layout jump (so you can click on boards right away on home without them jumping (used to be more important before new trello 2014-01)
 
@@ -2706,52 +2706,6 @@ function checkDownWarning() {
 		if (msNow - msLast < MSDELTA_DOWNWARN)
 			return;
 	}
-
-	showkDownWarning(function (bOK) {
-		localStorage[PROP_LS_MSLASTDOWNWARN] = msNow.toString();
-	});
-}
-
-function showkDownWarning(callback) {
-	var divDialog = $("#agile_dialog_DownWarning");
-
-	function doCloseDialog(callbackAfter) {
-		divDialog.removeClass("agile_dialog_Postit_Anim_ShiftToShow");
-		setTimeout(function () {
-			divDialog[0].close();
-			if (callbackAfter)
-				callbackAfter();
-		}, 300); //wait for animation to complete
-	}
-
-	if (divDialog.length == 0) {
-		//focus on h2 so it doesnt go to the first link
-		divDialog = $('\
-<dialog id="agile_dialog_DownWarning" style="cursor:pointer;padding-bottom:6px;padding-top:6px;text-align: center;width:21em;" class="agile_dialog_DefaultStyle agile_dialog_Postit agile_dialog_Postit_Anim">\
-<div tabindex="1" style="outline: none;cursor:pointer;margin-top:0em;"><span><B>🛑 Warning: Plus for Trello is going away :(</B></span></div> \
-<div> \
-After 10 years, time has come to say goodbye.<br><br>\
-Plus relies on a key technology called "web SQL" which <A target="_blank" href="https://developer.chrome.com/blog/deps-rems-101/#remove-websql-in-third-party-contexts">Chrome is removing soon</A>.	\
-</div> \
-<div> <br>\
-To export all your S/E data open <A target="_blank" href="'+ chrome.extension.getURL("report.html?pivotBy=year&orderBy=date&archived=-1&deleted=-1")+'">this report</A> and export it to excel or CSV.\
-<br><A href="https://www.plusfortrello.com/2022/05/going-down.html" target="_blank"> More information</A>\
-</div > \
-			 <br>\
-<div> <button style="display:inline-block;padding:0;margin-left:1em;margin-top:0;margin-bottom:0;width:3em;min-height:0.5em;">OK</button></div> \
-			 <br>\
-						  </dialog>');
-		divDialog.find("button").off("click.plusForTrello").on("click.plusForTrello", function (e) {
-			e.preventDefault();
-			doCloseDialog(function () {
-				callback(STATUS_OK, true);
-			});
-		});
-	getDialogParent().append(divDialog);
-	}
-
-	showModlessDialog(divDialog[0]);
-	setTimeout(function () { divDialog.addClass("agile_dialog_Postit_Anim_ShiftToShow"); }, 200); //some dialog conflict prevents animation from working without timeout
 }
 	/************************************************************* */
 

@@ -34,8 +34,8 @@ document.addEventListener('visibilitychange', function () {
     if (!isTabVisible())
         return;
     testExtension(function () {
-        if (g_bDidInitialIntervalsSetup && document.body) //once we got here without a body, so do some sanity checks for that timing issue
-        doAllUpdates(true);
+        // if (g_bDidInitialIntervalsSetup && document.body) //once we got here without a body, so do some sanity checks for that timing issue
+        // doAllUpdates(true);
     });
 });
 
@@ -640,18 +640,6 @@ function doAllUpdates(bFromInterval) {
             return; //prevent frequent calls (we pretend bFromInterval in some situations)
         g_msLastAllUpdatesInterval = msNow;
     }
-
-    //note: this mostly helps for testing during development, so the setting can be changed from
-    //one chrome tab as you watch another chrome tab with plus help and validate test scenarios
-    chrome.storage.sync.get([SYNCPROP_NO_SE, SYNCPROP_NO_EST], function (obj) {
-        var bNoSE = obj[SYNCPROP_NO_SE];
-        var bNoEst = obj[SYNCPROP_NO_EST];
-        if ((!bNoSE != !g_bNoSE) || (!bNoEst != !g_bNoEst)) {
-            g_bNoSE = bNoSE;
-            g_bNoEst = bNoEst;
-            showHideSEFeatures();
-        }
-    });
 
     var url = document.URL;
     var urlLower = url.toLowerCase();
