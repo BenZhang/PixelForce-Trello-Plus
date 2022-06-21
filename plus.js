@@ -2706,10 +2706,6 @@ function checkDownWarning() {
 		if (msNow - msLast < MSDELTA_DOWNWARN)
 			return;
 	}
-
-	showkDownWarning(function (bOK) {
-		localStorage[PROP_LS_MSLASTDOWNWARN] = msNow.toString();
-	});
 }
 
 function showkDownWarning(callback) {
